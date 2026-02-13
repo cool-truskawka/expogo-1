@@ -66,7 +66,7 @@ expo-image-picker
 
 Extension of ExpoGo on more advanced development process; used to build, deploy, update and publish real apps.
 
-CI/CD pipeline
+Cannot be used on ios without Apple Developer account (99$/year)
 
 Expo Orbit = to manage and launch builds
 
