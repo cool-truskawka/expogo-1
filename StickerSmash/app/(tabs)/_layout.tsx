@@ -11,7 +11,7 @@ export default function TabLayout() {
                     backgroundColor: '#25292e',
                 },
                 headerShadowVisible: false,
-                headerTintColor: '#eef79c',
+                headerTintColor: '#d82222',
                 headerTitleAlign: 'center',
                 tabBarStyle: {
                     backgroundColor: '#25292e',

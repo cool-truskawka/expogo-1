@@ -11,7 +11,7 @@ export default function RootLayout() {
           }
         } />
       </Stack>
-      <StatusBar style="lighdt" />
+      <StatusBar style="light" />
     </>
   );
 }

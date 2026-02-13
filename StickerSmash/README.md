@@ -60,3 +60,32 @@ Library for getting images from mobile libarry
 ```
 expo-image-picker
 ```
+
+
+### EAS = Expo Application Services
+
+Extension of ExpoGo on more advanced development process; used to build, deploy, update and publish real apps.
+
+CI/CD pipeline
+
+Expo Orbit = to manage and launch builds
+
+Development build = debug version of the project
+- optimized for quick iterations
+- expo-dev-client library
+
+EAS CLI 
+``` eas init ``` -> creates an EAS project and links it in app.json
+
+```
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d279d347-8244-49a6-848a-240b553a568e"
+      }
+    }
+```
+
+``` eas build:configure``` -> select platform; creates eas.json file
+
+``` eas build -p android --profile development``` -> creates a build in https://expo.dev that can be installed with Expo Orbit on emulator or local device connected by usb OR using QR code
