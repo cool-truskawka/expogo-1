@@ -3,14 +3,17 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'react-native';
 
 type Props = {
-    imageSource: any;
+    imageData: {
+        userImage: any,
+    };
+    imageSizePercentage?: any;
 }
 
-export default function CircleButtonMain({ imageSource }: Props) {
+export default function CircleButtonMain({ imageData, imageSizePercentage }: Props) {
     return (
-        <View style={styles.roundButtonContainer}>
+        <View style={[styles.roundButtonContainer, { width: imageSizePercentage }]}>
             <Pressable style={styles.roundButton} onPress={() => alert('Circle Button Pressed!')}>
-                <Image style={styles.roundImage} source={imageSource} />
+                <Image style={styles.roundImage} source={imageData.userImage} />
             </Pressable>
         </View>
     );
@@ -18,14 +21,11 @@ export default function CircleButtonMain({ imageSource }: Props) {
 
 const styles = StyleSheet.create({
     roundButtonContainer: {
-        width: 80,
-        height: 80,
-        color: '#33ff00',
-        borderColor: '#33ff00',
-        borderWidth: 2,
-        borderRadius: 40,
+        aspectRatio: 1,
+        borderRadius: 9999,
+        borderColor: '#791515',
+        borderWidth: 2.5,
         overflow: 'hidden',
-        marginTop: 10,
     },
     roundButton: {
         flex: 1,

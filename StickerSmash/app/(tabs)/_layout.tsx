@@ -16,7 +16,6 @@ export default function TabLayout() {
                 tabBarStyle: {
                     backgroundColor: '#25292e',
                 },
-
             }}>
             <Tabs.Screen name="index" options={{
                 title: 'Home',

@@ -12,7 +12,7 @@ export default function TabsLayout() {
                 headerTransparent: true,
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: '#161414',
+                    backgroundColor: '#2c2727',
                     borderTopColor: '#791515',
                     borderTopWidth: 2,
                 }             
