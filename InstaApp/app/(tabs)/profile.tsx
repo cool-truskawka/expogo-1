@@ -1,11 +1,8 @@
-import { View, Text, FlatList, Pressable } from 'react-native'
-import { StyleSheet } from 'react-native';
+import { View, Text, FlatList, Pressable, Image, Modal, StyleSheet } from 'react-native'
 import { useFonts, PlaywriteCU_400Regular } from '@expo-google-fonts/playwrite-cu';
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from 'react-native';
-import { useState } from 'react';
-import { Modal } from 'react-native';
-
+import { useEffect, useState } from 'react';
+import { supabase } from '../../supabase';
 
 import CircleButtonMain from "@/components/CircleButtonMain";
 
@@ -90,6 +87,51 @@ export default function ProfileScreen() {
     setSelectedPost(null);
   }
 
+  const [userStatsFromDB, setUserStatsFromDB] = useState({
+    posts: 0,
+    followers: 0,
+    following: 0,
+  });
+
+  async function getStats() {
+    const { data, error } = await supabase
+      .from('UsersTable')
+      .select('posts, followed, following')
+      .eq('userId', 'cool-truskawka')
+      .single();
+
+    setUserStatsFromDB({
+      posts: data?.posts || 0,
+      followers: data?.followed || 0,
+      following: data?.following || 0,
+    });
+
+    console.log("Data from DB:", data);
+    if (error) {
+      console.error("Error fetching user stats:", error);
+    }
+  }
+
+  useEffect(() => {
+    getStats();
+
+    const channel = supabase
+      .channel('supabase_realtime')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'UsersTable', filter: `userId=eq.cool-truskawka` }, (payload: any) => {
+        console.log('Change received!', payload);
+        setUserStatsFromDB({
+          posts: payload.new.posts,
+          followers: payload.new.followed,
+          following: payload.new.following,
+        });
+      })
+      .subscribe();
+  
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [])
+
   return (
     <View style={styles.container}>
       <Modal
@@ -97,9 +139,9 @@ export default function ProfileScreen() {
         transparent={true}
         visible={selectedPost !== null}
         onRequestClose={onModalClose}>
-          <Pressable style={styles.modalBackground} onPress={onModalClose}>
-            <Image source={selectedPost} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
-          </Pressable>
+        <Pressable style={styles.modalBackground} onPress={onModalClose}>
+          <Image source={selectedPost} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
+        </Pressable>
       </Modal>
       <View style={styles.headerContainer}>
         <Ionicons name="add" size={30} style={{ color: '#fff' }} />
@@ -110,15 +152,15 @@ export default function ProfileScreen() {
         <CircleButtonMain imageData={{ userImage }} imageSizePercentage='27%' />
         <View style={styles.statsContainer}>
           <View style={styles.stat}>
-            <Text style={styles.statUpperText}>{userStats.posts}</Text>
+            <Text style={styles.statUpperText}>{userStatsFromDB.posts}</Text>
             <Text style={styles.statBottomText}>posts</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statUpperText}>{userStats.following}</Text>
+            <Text style={styles.statUpperText}>{userStatsFromDB.following}</Text>
             <Text style={styles.statBottomText}>following</Text>
           </View>
           <View style={styles.stat}>
-            <Text style={styles.statUpperText}>{userStats.followers}</Text>
+            <Text style={styles.statUpperText}>{userStatsFromDB.followers}</Text>
             <Text style={styles.statBottomText}>followers</Text>
           </View>
         </View>
